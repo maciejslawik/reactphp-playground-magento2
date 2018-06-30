@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+/**
+ * File: random.php
+ *
+ * @author      Maciej Sławik <maciekslawik@gmail.com>
+ * Github:      https://github.com/maciejslawik
+ */
+
+$loopSize = 50000000;
+
+for ($i = 0; $i < $loopSize; $i++) {
+    rand();
+}
+
+echo 'Randomizer run 50000000 times' . PHP_EOL;

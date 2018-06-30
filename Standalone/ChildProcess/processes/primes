@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+/**
+ * File: primes.php
+ *
+ * @author      Maciej Sławik <maciekslawik@gmail.com>
+ * Github:      https://github.com/maciejslawik
+ */
+
+$loopSize = 70000;
+
+$primes = [];
+
+for ($i = 2; $i < $loopSize; $i++) {
+    for ($j = 2; $j < $i; $j++) {
+        if ($i % $j == 0) {
+            break;
+        }
+    }
+    if ($i === $j) {
+        $primes[] = $i;
+    }
+}
+
+echo 'Primes found: ' . count($primes) . PHP_EOL;

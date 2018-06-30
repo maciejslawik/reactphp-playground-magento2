@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+/**
+ * File: pi.php
+ *
+ * @author      Maciej Sławik <maciekslawik@gmail.com>
+ * Github:      https://github.com/maciejslawik
+ */
+
+
+$pi = 4;
+$top = 4;
+$bottom = 3;
+$minus = true;
+$accuracy = 50000000;
+
+for ($i = 0; $i < $accuracy; $i++) {
+    $pi += ($minus ? -($top / $bottom) : ($top / $bottom));
+    $minus = ($minus ? false : true);
+    $bottom += 2;
+}
+
+echo 'Pi ~= ' . $pi . PHP_EOL;

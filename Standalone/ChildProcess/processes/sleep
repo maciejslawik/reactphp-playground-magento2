@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+/**
+ * File: sleep.php
+ *
+ * @author      Maciej Sławik <maciekslawik@gmail.com>
+ * Github:      https://github.com/maciejslawik
+ */
+
+sleep(3);
+
+echo 'Slept 3 seconds' . PHP_EOL;

@@ -1,0 +1,48 @@
+#!/usr/bin/env php
+<?php
+/**
+ * File: childprocess.php
+ *
+ * @author      Maciej Sławik <maciekslawik@gmail.com>
+ * Github:      https://github.com/maciejslawik
+ */
+
+use MSlwk\ReactPhpPlayground\Api\Data\ProcessInterface;
+use MSlwk\ReactPhpPlayground\Model\Adapter\ReactPHP\ProcessFactory;
+use MSlwk\ReactPhpPlayground\Model\Data\Process;
+use MSlwk\ReactPhpPlayground\Model\Timer;
+use MSlwk\ReactPhpPlayground\Standalone\ChildProcess\AsynchronousProcessRunner;
+use MSlwk\ReactPhpPlayground\Standalone\ChildProcess\ProcessRunnerInterface;
+use MSlwk\ReactPhpPlayground\Standalone\ChildProcess\SynchronousProcessRunner;
+use MSlwk\TypeSafeArray\ObjectArrayFactory;
+use React\EventLoop\Factory;
+
+require_once __DIR__ . '/../../../../../../vendor/autoload.php';
+
+$objectArrayFactory = new ObjectArrayFactory();
+$timer = new Timer();
+$processFactory = new ProcessFactory();
+$loop = Factory::create();
+
+$synchronousRunner = new SynchronousProcessRunner();
+$asynchronousRunner = new AsynchronousProcessRunner($loop, $processFactory);
+
+$processes = $objectArrayFactory->create(ProcessInterface::class);
+$processes->add(new Process(__DIR__ . '/../ChildProcess/processes/pi'));
+$processes->add(new Process(__DIR__ . '/../ChildProcess/processes/primes'));
+$processes->add(new Process(__DIR__ . '/../ChildProcess/processes/random'));
+$processes->add(new Process(__DIR__ . '/../ChildProcess/processes/sleep'));
+
+$runners = [
+    $synchronousRunner,
+    $asynchronousRunner
+];
+
+/** @var ProcessRunnerInterface $runner */
+foreach ($runners as $runner) {
+    $timer->startTimer();
+    $runner->runProcesses($processes);
+    $timer->stopTimer();
+    echo '--------------------------------------------------------------------------------------------------' . PHP_EOL;
+    echo 'Execution time for ' . get_class($runner) . ': ' . $timer->getExecutionTimeInSeconds() . ' seconds' . PHP_EOL;
+}

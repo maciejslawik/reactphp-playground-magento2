@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php
+/**
+ * File: http
+ *
+ * @author      Maciej Sławik <maciekslawik@gmail.com>
+ * Github:      https://github.com/maciejslawik
+ */
+
+use MSlwk\ReactPhpPlayground\Model\Timer;
+use MSlwk\ReactPhpPlayground\Standalone\Http\AsynchronousClient;
+use MSlwk\ReactPhpPlayground\Standalone\Http\ClientInterface;
+use MSlwk\ReactPhpPlayground\Standalone\Http\HalfAsynchronousClient;
+use MSlwk\ReactPhpPlayground\Model\Adapter\ReactPHP\ClientFactory;
+use MSlwk\ReactPhpPlayground\Standalone\Http\SynchronousClient;
+use MSlwk\ReactPhpPlayground\Standalone\Http\UrlProvider;
+use MSlwk\TypeSafeArray\ObjectArrayFactory;
+use React\EventLoop\Factory;
+
+require_once __DIR__ . '/../../../../../../vendor/autoload.php';
+
+$objectArrayFactory = new ObjectArrayFactory();
+$urlProvider = new UrlProvider($objectArrayFactory);
+$clientFactory = new ClientFactory();
+$synchronousClient = new SynchronousClient($objectArrayFactory);
+$halfAsynchronousClient = new HalfAsynchronousClient(Factory::create(), $clientFactory, $objectArrayFactory);
+$asynchronousClient = new AsynchronousClient(Factory::create(), $clientFactory, $objectArrayFactory);
+$timer = new Timer();
+
+$clients = $objectArrayFactory->create(
+    ClientInterface::class,
+    [
+        $synchronousClient,
+        $halfAsynchronousClient,
+        $asynchronousClient
+    ]
+);
+
+/** @var ClientInterface $client */
+foreach ($clients as $client) {
+    $timer->startTimer();
+    $htmls = $client->getContent($urlProvider->getUrls());
+    $timer->stopTimer();
+    echo '--------------------------------------------------------------------------------------------------' . PHP_EOL;
+    echo 'Execution time for ' . get_class($client) . ': ' . $timer->getExecutionTimeInSeconds() . ' seconds' . PHP_EOL;
+}
