@@ -43,9 +43,20 @@ class SynchronousClient implements ClientInterface
         $htmlObjectArray = $this->objectArrayFactory->create(HtmlInterface::class);
         /** @var UrlInterface $url */
         foreach ($urls as $url) {
-            $html = file_get_contents($url->getUrl());
+            $html = $this->fileGetContentsWrapper($url);
             $htmlObjectArray->add(new Html($html));
         }
         return $htmlObjectArray;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @param UrlInterface $url
+     * @return bool|string
+     */
+    protected function fileGetContentsWrapper(UrlInterface $url)
+    {
+        $html = file_get_contents($url->getUrl());
+        return $html;
     }
 }

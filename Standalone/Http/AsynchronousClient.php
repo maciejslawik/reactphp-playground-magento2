@@ -63,25 +63,36 @@ class AsynchronousClient implements ClientInterface
         $htmlObjectArray = $this->objectArrayFactory->create(HtmlInterface::class);
         /** @var UrlInterface $url */
         foreach ($urls as $url) {
-            $client = $this->clientFactory->create($this->loop);
-            $request = $client->request('GET', $url->getUrl());
-            $request->on('response', function (Response $response) use (&$htmlObjectArray) {
-                $data = '';
-                $response->on(
-                    'data',
-                    function ($chunk) use (&$data) {
-                        $data .= $chunk;
-                    }
-                )->on(
-                    'end',
-                    function () use (&$htmlObjectArray, &$data) {
-                        $htmlObjectArray->add(new Html($data));
-                    }
-                );
-            });
-            $request->end();
+            $this->createRequestDefinition($url, $htmlObjectArray);
         }
         $this->loop->run();
         return $htmlObjectArray;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @param UrlInterface $url
+     * @param ObjectArray $htmlObjectArray
+     * @return void
+     */
+    private function createRequestDefinition(UrlInterface $url, ObjectArray &$htmlObjectArray): void
+    {
+        $client = $this->clientFactory->create($this->loop);
+        $request = $client->request('GET', $url->getUrl());
+        $request->on('response', function (Response $response) use (&$htmlObjectArray) {
+            $data = '';
+            $response->on(
+                'data',
+                function ($chunk) use (&$data) {
+                    $data .= $chunk;
+                }
+            )->on(
+                'end',
+                function () use (&$htmlObjectArray, &$data) {
+                    $htmlObjectArray->add(new Html($data));
+                }
+            );
+        });
+        $request->end();
     }
 }

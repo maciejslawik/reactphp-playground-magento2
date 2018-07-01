@@ -1,10 +1,13 @@
 <?php
+declare(strict_types=1);
+
 /**
- * File: AsynchronousProcessRunner.php
+ * File:HalfAsynchronousProcessRunner.php
  *
- * @author      Maciej Sławik <maciekslawik@gmail.com>
- * Github:      https://github.com/maciejslawik
+ * @author Maciej Sławik <maciej.slawik@lizardmedia.pl>
+ * @copyright Copyright (C) 2018 Lizard Media (http://lizardmedia.pl)
  */
+
 
 namespace MSlwk\ReactPhpPlayground\Standalone\ChildProcess;
 
@@ -14,10 +17,10 @@ use MSlwk\TypeSafeArray\ObjectArray;
 use React\EventLoop\LoopInterface;
 
 /**
- * Class AsynchronousProcessRunner
+ * Class HalfAsynchronousProcessRunner
  * @package MSlwk\ReactPhpPlayground\Standalone\ChildProcess
  */
-class AsynchronousProcessRunner implements ProcessRunnerInterface
+class HalfAsynchronousProcessRunner implements ProcessRunnerInterface
 {
     /**
      * @var LoopInterface
@@ -48,9 +51,13 @@ class AsynchronousProcessRunner implements ProcessRunnerInterface
      */
     public function runProcesses(ObjectArray $processes): void
     {
-        /** @var ProcessInterface $process */
-        foreach ($processes as $process) {
-            $this->createProcessDefinition($process);
+        for ($i = 0; $i < ($processes->count() / 2); $i++) {
+            $this->createProcessDefinition($processes->offsetGet($i));
+        }
+        $this->loop->run();
+
+        for ($i; $i < ($processes->count()); $i++) {
+            $this->createProcessDefinition($processes->offsetGet($i));
         }
         $this->loop->run();
     }

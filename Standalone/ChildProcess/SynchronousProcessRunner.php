@@ -25,8 +25,18 @@ class SynchronousProcessRunner implements ProcessRunnerInterface
     {
         /** @var ProcessInterface $process */
         foreach ($processes as $process) {
-            $output = exec($process->getCommand());
+            $output = $this->execWrapper($process->getCommand());
             echo $output . PHP_EOL;
         }
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @param string $command
+     * @return string
+     */
+    protected function execWrapper(string $command): string
+    {
+        return exec($command);
     }
 }

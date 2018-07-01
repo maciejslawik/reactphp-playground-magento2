@@ -76,6 +76,7 @@ class HalfAsynchronousClient implements ClientInterface
     }
 
     /**
+     * @codeCoverageIgnore
      * @param UrlInterface $url
      * @param ObjectArray $htmlObjectArray
      * @return void

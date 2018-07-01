@@ -12,6 +12,7 @@ use MSlwk\ReactPhpPlayground\Model\Adapter\ReactPHP\ProcessFactory;
 use MSlwk\ReactPhpPlayground\Model\Data\Process;
 use MSlwk\ReactPhpPlayground\Model\Timer;
 use MSlwk\ReactPhpPlayground\Standalone\ChildProcess\AsynchronousProcessRunner;
+use MSlwk\ReactPhpPlayground\Standalone\ChildProcess\HalfAsynchronousProcessRunner;
 use MSlwk\ReactPhpPlayground\Standalone\ChildProcess\ProcessRunnerInterface;
 use MSlwk\ReactPhpPlayground\Standalone\ChildProcess\SynchronousProcessRunner;
 use MSlwk\TypeSafeArray\ObjectArrayFactory;
@@ -25,6 +26,7 @@ $processFactory = new ProcessFactory();
 $loop = Factory::create();
 
 $synchronousRunner = new SynchronousProcessRunner();
+$halfAsynchronousRunner = new HalfAsynchronousProcessRunner($loop, $processFactory);
 $asynchronousRunner = new AsynchronousProcessRunner($loop, $processFactory);
 
 $processes = $objectArrayFactory->create(ProcessInterface::class);
@@ -35,6 +37,7 @@ $processes->add(new Process(__DIR__ . '/../ChildProcess/processes/sleep'));
 
 $runners = [
     $synchronousRunner,
+    $halfAsynchronousRunner,
     $asynchronousRunner
 ];
 
