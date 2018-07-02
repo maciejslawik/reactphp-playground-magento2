@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!--
+@author Maciej Sławik <maciekslawik@gmail.com>
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="MSlwk_ReactPhpPlayground" schema_version="1.0.0" setup_version="1.0.0">
+    </module>
+</config>

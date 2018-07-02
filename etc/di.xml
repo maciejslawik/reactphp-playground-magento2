@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+@author Maciej Sławik <maciekslawik@gmail.com>
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!--Preference section-->
+
+    <preference for="MSlwk\ReactPhpPlayground\Api\Report\ReportGeneratorInterface"
+                type="MSlwk\ReactPhpPlayground\Model\Report\ReportGenerator" />
+    <preference for="MSlwk\ReactPhpPlayground\Api\Report\ReportSenderInterface"
+                type="MSlwk\ReactPhpPlayground\Model\Report\ReportSender" />
+
+    <!--End of preference section-->
+
+    <!--Console commands section-->
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="generate-reports"
+                      xsi:type="object">MSlwk\ReactPhpPlayground\Console\Command\GenerateReports</item>
+                <item name="start-cli-reporting-service"
+                      xsi:type="object">MSlwk\ReactPhpPlayground\Console\Command\StartCliReportingService</item>
+                <item name="start-webapi-reporting-service"
+                      xsi:type="object">MSlwk\ReactPhpPlayground\Console\Command\StartWebapiReportingService</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!--End of console commands section-->
+
+</config>
