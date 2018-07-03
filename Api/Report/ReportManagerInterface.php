@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * File: ReportGeneratorInterface.php
+ * File: ReportManagerInterface.php
  *
  * @author      Maciej Sławik <maciekslawik@gmail.com>
  * Github:      https://github.com/maciejslawik
@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace MSlwk\ReactPhpPlayground\Api\Report;
 
 /**
- * Interface ReportGeneratorInterface
+ * Interface ReportManagerInterface
  * @package MSlwk\ReactPhpPlayground\Api\Report
  */
-interface ReportGeneratorInterface
+interface ReportManagerInterface
 {
     /**
      * @param int $customerId
-     * @return string
+     * @return void
      */
-    public function generateReport(int $customerId): string;
+    public function generateAndSendReportForCustomer(int $customerId): void;
 }

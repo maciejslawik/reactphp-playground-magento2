@@ -10,6 +10,8 @@
                 type="MSlwk\ReactPhpPlayground\Model\Report\ReportGenerator" />
     <preference for="MSlwk\ReactPhpPlayground\Api\Report\ReportSenderInterface"
                 type="MSlwk\ReactPhpPlayground\Model\Report\ReportSender" />
+    <preference for="MSlwk\ReactPhpPlayground\Api\Report\ReportManagerInterface"
+                type="MSlwk\ReactPhpPlayground\Model\Report\ReportManager" />
 
     <!--End of preference section-->
 
