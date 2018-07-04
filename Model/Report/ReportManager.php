@@ -44,12 +44,14 @@ class ReportManager implements ReportManagerInterface
     }
 
     /**
-     * @param int $customerId
+     * @param int[] $customerIds
      * @return void
      */
-    public function generateAndSendReportForCustomer(int $customerId): void
+    public function generateAndSendReportForCustomers(array $customerIds): void
     {
-        $report = $this->reportGenerator->generateReport($customerId);
-        $this->reportSender->sendReport($report);
+        foreach ($customerIds as $customerId) {
+            $report = $this->reportGenerator->generateReport($customerId);
+            $this->reportSender->sendReport($report);
+        }
     }
 }

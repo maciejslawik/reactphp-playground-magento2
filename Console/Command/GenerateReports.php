@@ -71,8 +71,6 @@ class GenerateReports extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $customerIds = $this->jsonHandler->unserialize($input->getArgument(self::ARGUMENT_CUSTOMER_IDS));
-        foreach ($customerIds as $customerId) {
-            $this->reportManager->generateAndSendReportForCustomer($customerId);
-        }
+        $this->reportManager->generateAndSendReportForCustomer($customerIds);
     }
 }
