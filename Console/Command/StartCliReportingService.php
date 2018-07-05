@@ -12,10 +12,13 @@ namespace MSlwk\ReactPhpPlayground\Console\Command;
 
 use MSlwk\ReactPhpPlayground\Api\CustomerIdsProviderInterface;
 use MSlwk\ReactPhpPlayground\Api\TimerInterface;
+use MSlwk\ReactPhpPlayground\Model\Adapter\ReactPHP\ProcessFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use React\EventLoop\Factory;
 
 /**
  * Class StartCliReportingService
@@ -37,19 +40,43 @@ class StartCliReportingService extends Command
     private $customerIdsProvider;
 
     /**
+     * @var LoopInterface
+     */
+    private $loop;
+
+    /**
+     * @var ProcessFactory
+     */
+    private $processFactory;
+
+    /**
+     * @var Json
+     */
+    private $jsonHandler;
+
+    /**
      * StartCliReportingService constructor.
      * @param TimerInterface $timer
      * @param CustomerIdsProviderInterface $customerIdsProvider
+     * @param Factory $loopFactory
+     * @param ProcessFactory $processFactory
+     * @param Json $jsonHandler
      * @param null $name
      */
     public function __construct(
         TimerInterface $timer,
         CustomerIdsProviderInterface $customerIdsProvider,
+        Factory $loopFactory,
+        ProcessFactory $processFactory,
+        Json $jsonHandler,
         $name = null
     ) {
         parent::__construct($name);
         $this->timer = $timer;
         $this->customerIdsProvider = $customerIdsProvider;
+        $this->loop = $loopFactory::create();
+        $this->processFactory = $processFactory;
+        $this->jsonHandler = $jsonHandler;
     }
 
     /**
@@ -72,11 +99,67 @@ class StartCliReportingService extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $numberOfThreads = (int)$input->getArgument(self::ARGUMENT_NUMBER_OF_THREADS);
-        $this->timer->startTimer();
         $customerIds = $this->customerIdsProvider->getCustomerIds();
+
+        $this->timer->startTimer();
+
+        $this->startProcesses($customerIds, $numberOfThreads);
 
         $this->timer->stopTimer();
 
         $output->writeln("Process finished after {$this->timer->getExecutionTimeInSeconds()} seconds");
+    }
+
+    /**
+     * @param array $customerIds
+     * @param int $numberOfThreads
+     */
+    protected function startProcesses(array $customerIds, int $numberOfThreads): void
+    {
+        $numberOfChunks = $this->calculateNumberOfChunksForThreads($customerIds, $numberOfThreads);
+        $threadedCustomerIds = array_chunk($customerIds, $numberOfChunks);
+        foreach ($threadedCustomerIds as $customerIdsForSingleThread) {
+            $this->createProcessDefinition($this->getFullCommand($customerIdsForSingleThread));
+        }
+        $this->loop->run();
+    }
+
+    /**
+     * @param string $command
+     */
+    protected function createProcessDefinition(string $command): void
+    {
+        $reactProcess = $this->processFactory->create($command);
+        $reactProcess->start($this->loop);
+
+        $reactProcess->stdout->on('data', function ($chunk) {
+            echo $chunk;
+        });
+    }
+
+    /**
+     * @param int[] $customerIds
+     * @return string
+     */
+    protected function getFullCommand(array $customerIds): string
+    {
+        return PHP_BINARY
+            . sprintf(
+                ' %s/bin/magento %s %s',
+                BP,
+                GenerateReports::COMMAND_NAME,
+                $this->jsonHandler->serialize($customerIds)
+            );
+    }
+
+    /**
+     * @param array $customerIds
+     * @param int $numberOfThreads
+     * @return int
+     */
+    protected function calculateNumberOfChunksForThreads(array $customerIds, int $numberOfThreads): int
+    {
+        $numberOfChunks = (int)(count($customerIds) / $numberOfThreads);
+        return $numberOfChunks > 0 ? $numberOfChunks : 1;
     }
 }

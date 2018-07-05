@@ -52,6 +52,7 @@ class ReportManager implements ReportManagerInterface
         foreach ($customerIds as $customerId) {
             $report = $this->reportGenerator->generateReport($customerId);
             $this->reportSender->sendReport($report);
+            echo "Reporting process finished for customer: {$customerId}\n";
         }
     }
 }

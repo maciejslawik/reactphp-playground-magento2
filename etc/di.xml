@@ -14,6 +14,8 @@
                 type="MSlwk\ReactPhpPlayground\Model\Report\ReportManager" />
     <preference for="MSlwk\ReactPhpPlayground\Api\CustomerIdsProviderInterface"
                 type="MSlwk\ReactPhpPlayground\Model\FakeCustomerIdsProvider" />
+    <preference for="MSlwk\ReactPhpPlayground\Api\TimerInterface"
+                type="MSlwk\ReactPhpPlayground\Model\Timer" />
 
     <!--End of preference section-->
 

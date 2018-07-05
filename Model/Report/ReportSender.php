@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace MSlwk\ReactPhpPlayground\Model\Report;
 
-use MSlwk\ReactPhpPlayground\Api\ReportSenderInterface;
+use MSlwk\ReactPhpPlayground\Api\Report\ReportSenderInterface;
 
 /**
  * Class ReportSender
