@@ -10,8 +10,10 @@
                 type="MSlwk\ReactPhpPlayground\Model\Report\ReportGenerator" />
     <preference for="MSlwk\ReactPhpPlayground\Api\Report\ReportSenderInterface"
                 type="MSlwk\ReactPhpPlayground\Model\Report\ReportSender" />
-    <preference for="MSlwk\ReactPhpPlayground\Api\Report\ReportManagerInterface"
-                type="MSlwk\ReactPhpPlayground\Model\Report\ReportManager" />
+    <preference for="MSlwk\ReactPhpPlayground\Api\Report\CliReportManagerInterface"
+                type="MSlwk\ReactPhpPlayground\Model\Report\CliReportManager" />
+    <preference for="MSlwk\ReactPhpPlayground\Api\Report\WebapiReportManagerInterface"
+                type="MSlwk\ReactPhpPlayground\Model\Report\WebapiReportManager" />
     <preference for="MSlwk\ReactPhpPlayground\Api\CustomerIdsProviderInterface"
                 type="MSlwk\ReactPhpPlayground\Model\FakeCustomerIdsProvider" />
     <preference for="MSlwk\ReactPhpPlayground\Api\TimerInterface"
@@ -35,5 +37,18 @@
     </type>
 
     <!--End of console commands section-->
+
+    <!--Constructor parameters section-->
+
+    <type name="MSlwk\ReactPhpPlayground\Console\Command\StartWebapiReportingService">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="storeManager"
+                      xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!--End of constructor parameters section-->
 
 </config>

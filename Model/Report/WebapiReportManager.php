@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * File: ReportManager.php
+ * File: WebapiReportManager.php
  *
  * @author      Maciej Sławik <maciekslawik@gmail.com>
  * Github:      https://github.com/maciejslawik
@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace MSlwk\ReactPhpPlayground\Model\Report;
 
 use MSlwk\ReactPhpPlayground\Api\Report\ReportGeneratorInterface;
-use MSlwk\ReactPhpPlayground\Api\Report\ReportManagerInterface;
+use MSlwk\ReactPhpPlayground\Api\Report\WebapiReportManagerInterface;
 use MSlwk\ReactPhpPlayground\Api\Report\ReportSenderInterface;
 
 /**
- * Class ReportManager
+ * Class WebapiReportManager
  * @package MSlwk\ReactPhpPlayground\Model\Report
  */
-class ReportManager implements ReportManagerInterface
+class WebapiReportManager implements WebapiReportManagerInterface
 {
     /**
      * @var ReportGeneratorInterface
@@ -31,7 +31,7 @@ class ReportManager implements ReportManagerInterface
     private $reportSender;
 
     /**
-     * ReportManager constructor.
+     * WebapiReportManager constructor.
      * @param ReportGeneratorInterface $reportGenerator
      * @param ReportSenderInterface $reportSender
      */
@@ -45,14 +45,16 @@ class ReportManager implements ReportManagerInterface
 
     /**
      * @param int[] $customerIds
-     * @return void
+     * @return string[]
      */
-    public function generateAndSendReportForCustomers(array $customerIds): void
+    public function generateAndSendReportForCustomers(array $customerIds): array
     {
+        $messages = [];
         foreach ($customerIds as $customerId) {
             $report = $this->reportGenerator->generateReport($customerId);
             $this->reportSender->sendReport($report);
-            echo "Reporting process finished for customer: {$customerId}\n";
+            $messages[] = "Reporting process finished for customer: {$customerId}\n";
         }
+        return $messages;
     }
 }

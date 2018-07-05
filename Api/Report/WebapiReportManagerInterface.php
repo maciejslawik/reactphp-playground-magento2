@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * File: ReportManagerInterface.php
+ * File: WebapiReportManagerInterface.php
  *
  * @author      Maciej Sławik <maciekslawik@gmail.com>
  * Github:      https://github.com/maciejslawik
@@ -11,14 +11,14 @@ declare(strict_types=1);
 namespace MSlwk\ReactPhpPlayground\Api\Report;
 
 /**
- * Interface ReportManagerInterface
+ * Interface WebapiReportManagerInterface
  * @package MSlwk\ReactPhpPlayground\Api\Report
  */
-interface ReportManagerInterface
+interface WebapiReportManagerInterface
 {
     /**
      * @param int[] $customerIds
-     * @return void
+     * @return string[]
      */
-    public function generateAndSendReportForCustomers(array $customerIds): void;
+    public function generateAndSendReportForCustomers(array $customerIds): array;
 }

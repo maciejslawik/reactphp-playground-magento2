@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace MSlwk\ReactPhpPlayground\Console\Command;
 
 use Magento\Framework\Serialize\Serializer\Json;
-use MSlwk\ReactPhpPlayground\Api\Report\ReportManagerInterface;
+use MSlwk\ReactPhpPlayground\Api\Report\CliReportManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,19 +32,19 @@ class GenerateReports extends Command
     private $jsonHandler;
 
     /**
-     * @var ReportManagerInterface
+     * @var CliReportManagerInterface
      */
     private $reportManager;
 
     /**
      * GenerateReports constructor.
      * @param Json $jsonHandler
-     * @param ReportManagerInterface $reportManager
+     * @param CliReportManagerInterface $reportManager
      * @param null $name
      */
     public function __construct(
         Json $jsonHandler,
-        ReportManagerInterface $reportManager,
+        CliReportManagerInterface $reportManager,
         $name = null
     ) {
         parent::__construct($name);

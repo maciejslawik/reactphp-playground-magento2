@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+@author Maciej Sławik <maciekslawik@gmail.com>
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/mslwk/customer-report/generate" method="POST">
+        <service class="MSlwk\ReactPhpPlayground\Api\Report\WebapiReportManagerInterface" method="generateAndSendReportForCustomers"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>
