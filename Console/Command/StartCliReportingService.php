@@ -97,6 +97,7 @@ class StartCliReportingService extends Command
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @return void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -113,7 +114,7 @@ class StartCliReportingService extends Command
     }
 
     /**
-     * @param array $customerIds
+     * @param int[] $customerIds
      * @param int $numberOfThreads
      */
     protected function startProcesses(array $customerIds, int $numberOfThreads): void
@@ -155,7 +156,7 @@ class StartCliReportingService extends Command
     }
 
     /**
-     * @param array $customerIds
+     * @param int[] $customerIds
      * @param int $numberOfThreads
      * @return int
      */
