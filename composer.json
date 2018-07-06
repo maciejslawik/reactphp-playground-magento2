@@ -15,6 +15,7 @@
   "require": {
     "php": "^7.1.0",
     "magento/framework": ">=101.0.0",
+    "magento/module-store": ">=100.0.0",
     "mslwk/php-typesafe-array": "^1.0",
     "react/http-client": "^0.5.9",
     "react/child-process": "^0.5.2"
