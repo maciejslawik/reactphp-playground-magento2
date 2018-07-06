@@ -30,6 +30,7 @@ use React\HttpClient\Response;
 class StartWebapiReportingService extends Command
 {
     const COMMAND_NAME = 'mslwk:webapi-reporting-start';
+    const COMMAND_DESCRIPTION = 'Start asynchronous WebAPI reporting service';
     const ARGUMENT_NUMBER_OF_THREADS = 'threads';
 
     const API_ENDPOINT_PATH = 'rest/V1/mslwk/customer-report/generate';
@@ -58,11 +59,6 @@ class StartWebapiReportingService extends Command
      * @var Json
      */
     private $jsonHandler;
-
-    /**
-     * @var null
-     */
-    private $name;
 
     /**
      * @var StoreManagerInterface
@@ -94,7 +90,6 @@ class StartWebapiReportingService extends Command
         $this->loop = $loopFactory::create();
         $this->clientFactory = $clientFactory;
         $this->jsonHandler = $jsonHandler;
-        $this->name = $name;
         $this->storeManager = $storeManager;
     }
 
@@ -104,7 +99,7 @@ class StartWebapiReportingService extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-            ->setDescription('Start asynchronous WebAPI reporting service')
+            ->setDescription(self::COMMAND_DESCRIPTION)
             ->addArgument(
                 self::ARGUMENT_NUMBER_OF_THREADS,
                 InputArgument::REQUIRED,
@@ -113,7 +108,8 @@ class StartWebapiReportingService extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -126,7 +122,7 @@ class StartWebapiReportingService extends Command
 
         $this->timer->stopTimer();
 
-        $output->writeln("Process finished after {$this->timer->getExecutionTimeInSeconds()} seconds");
+        $output->writeln("<info>Process finished after {$this->timer->getExecutionTimeInSeconds()} seconds</info>");
     }
 
     /**

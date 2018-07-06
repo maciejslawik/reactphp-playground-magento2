@@ -21,6 +21,7 @@ class ReportSender implements ReportSenderInterface
     /**
      * @param string $report
      * @return void
+     * @codeCoverageIgnore
      */
     public function sendReport(string $report): void
     {

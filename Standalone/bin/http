@@ -44,5 +44,10 @@ foreach ($clients as $client) {
     $htmls = $client->getContent($urlProvider->getUrls());
     $timer->stopTimer();
     echo '--------------------------------------------------------------------------------------------------' . PHP_EOL;
-    echo 'Execution time for ' . get_class($client) . ': ' . $timer->getExecutionTimeInSeconds() . ' seconds' . PHP_EOL;
+    echo "\033[0;32mExecution time for "
+        . get_class($client)
+        . ': '
+        . $timer->getExecutionTimeInSeconds()
+        . " seconds\033[0m"
+        . PHP_EOL;
 }

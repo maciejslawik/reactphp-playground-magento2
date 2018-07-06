@@ -27,6 +27,7 @@ use React\EventLoop\Factory;
 class StartCliReportingService extends Command
 {
     const COMMAND_NAME = 'mslwk:cli-reporting-start';
+    const COMMAND_DESCRIPTION = 'Start asynchronous CLI reporting service';
     const ARGUMENT_NUMBER_OF_THREADS = 'threads';
 
     /**
@@ -85,7 +86,7 @@ class StartCliReportingService extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-            ->setDescription('Start asynchronous CLI reporting service')
+            ->setDescription(self::COMMAND_DESCRIPTION)
             ->addArgument(
                 self::ARGUMENT_NUMBER_OF_THREADS,
                 InputArgument::REQUIRED,
@@ -94,7 +95,8 @@ class StartCliReportingService extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -107,7 +109,7 @@ class StartCliReportingService extends Command
 
         $this->timer->stopTimer();
 
-        $output->writeln("Process finished after {$this->timer->getExecutionTimeInSeconds()} seconds");
+        $output->writeln("<info>Process finished after {$this->timer->getExecutionTimeInSeconds()} seconds</info>");
     }
 
     /**

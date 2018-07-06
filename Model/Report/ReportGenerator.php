@@ -21,6 +21,7 @@ class ReportGenerator implements ReportGeneratorInterface
     /**
      * @param int $customerId
      * @return string
+     * @codeCoverageIgnore
      */
     public function generateReport(int $customerId): string
     {

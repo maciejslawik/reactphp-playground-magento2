@@ -24,6 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class GenerateReports extends Command
 {
     const COMMAND_NAME = 'mslwk:generate-reports';
+    const COMMAND_DESCRIPTION = 'Generate reports for customers with IDs supplied';
     const ARGUMENT_CUSTOMER_IDS = 'customer-ids';
 
     /**
@@ -58,7 +59,7 @@ class GenerateReports extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_NAME)
-            ->setDescription('Generate reports for customers with IDs supplied')
+            ->setDescription(self::COMMAND_DESCRIPTION)
             ->addArgument(
                 self::ARGUMENT_CUSTOMER_IDS,
                 InputArgument::REQUIRED
@@ -66,7 +67,8 @@ class GenerateReports extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
