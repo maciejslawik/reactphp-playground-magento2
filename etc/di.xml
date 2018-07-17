@@ -18,6 +18,8 @@
                 type="MSlwk\ReactPhpPlayground\Model\FakeCustomerIdsProvider" />
     <preference for="MSlwk\ReactPhpPlayground\Api\TimerInterface"
                 type="MSlwk\ReactPhpPlayground\Model\Timer" />
+    <preference for="MSlwk\ReactPhpPlayground\Api\ChunkSizeCalculatorInterface"
+                type="MSlwk\ReactPhpPlayground\Model\ChunkSizeCalculator" />
 
     <!--End of preference section-->
 

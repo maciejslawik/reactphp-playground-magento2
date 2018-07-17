@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace MSlwk\ReactPhpPlayground\Test\Unit\Console\Command;
 
+use MSlwk\ReactPhpPlayground\Api\ChunkSizeCalculatorInterface;
 use MSlwk\ReactPhpPlayground\Console\Command\StartCliReportingService;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -50,13 +51,17 @@ class StartCliReportingServiceTest extends TestCase
         $jsonHandler = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var PHPUnit_Framework_MockObject_MockObject|ChunkSizeCalculatorInterface $chunkSizeCalculator */
+        $chunkSizeCalculator = $this->getMockBuilder(ChunkSizeCalculatorInterface::class)
+            ->getMock();
 
         $this->command = new StartCliReportingService(
             $timer,
             $customerIdsProvider,
             $loopFactory,
             $processFactory,
-            $jsonHandler
+            $jsonHandler,
+            $chunkSizeCalculator
         );
     }
 

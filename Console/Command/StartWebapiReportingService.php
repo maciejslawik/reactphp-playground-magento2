@@ -12,6 +12,7 @@ namespace MSlwk\ReactPhpPlayground\Console\Command;
 
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\StoreManagerInterface;
+use MSlwk\ReactPhpPlayground\Api\ChunkSizeCalculatorInterface;
 use MSlwk\ReactPhpPlayground\Api\CustomerIdsProviderInterface;
 use MSlwk\ReactPhpPlayground\Api\TimerInterface;
 use MSlwk\ReactPhpPlayground\Model\Adapter\ReactPHP\ClientFactory;
@@ -66,6 +67,11 @@ class StartWebapiReportingService extends Command
     private $storeManager;
 
     /**
+     * @var ChunkSizeCalculatorInterface
+     */
+    private $chunkSizeCalculator;
+
+    /**
      * StartWebapiReportingService constructor.
      * @param TimerInterface $timer
      * @param CustomerIdsProviderInterface $customerIdsProvider
@@ -73,6 +79,7 @@ class StartWebapiReportingService extends Command
      * @param ClientFactory $clientFactory
      * @param Json $jsonHandler
      * @param StoreManagerInterface $storeManager
+     * @param ChunkSizeCalculatorInterface $chunkSizeCalculator
      * @param null $name
      */
     public function __construct(
@@ -82,6 +89,7 @@ class StartWebapiReportingService extends Command
         ClientFactory $clientFactory,
         Json $jsonHandler,
         StoreManagerInterface $storeManager,
+        ChunkSizeCalculatorInterface $chunkSizeCalculator,
         $name = null
     ) {
         parent::__construct($name);
@@ -91,6 +99,7 @@ class StartWebapiReportingService extends Command
         $this->clientFactory = $clientFactory;
         $this->jsonHandler = $jsonHandler;
         $this->storeManager = $storeManager;
+        $this->chunkSizeCalculator = $chunkSizeCalculator;
     }
 
     /**
@@ -132,8 +141,8 @@ class StartWebapiReportingService extends Command
      */
     protected function startProcesses(array $customerIds, int $numberOfThreads): void
     {
-        $numberOfChunks = $this->calculateNumberOfChunksForThreads($customerIds, $numberOfThreads);
-        $threadedCustomerIds = array_chunk($customerIds, $numberOfChunks);
+        $chunkSize = $this->chunkSizeCalculator->calculateChunkSize($customerIds, $numberOfThreads);
+        $threadedCustomerIds = array_chunk($customerIds, $chunkSize);
         foreach ($threadedCustomerIds as $customerIdsForSingleThread) {
             $this->createRequestDefinition($customerIdsForSingleThread);
         }
@@ -181,16 +190,5 @@ class StartWebapiReportingService extends Command
     protected function getRequestUrl(): string
     {
         return $this->storeManager->getStore()->getBaseUrl() . self::API_ENDPOINT_PATH;
-    }
-
-    /**
-     * @param array $customerIds
-     * @param int $numberOfThreads
-     * @return int
-     */
-    protected function calculateNumberOfChunksForThreads(array $customerIds, int $numberOfThreads): int
-    {
-        $numberOfChunks = (int)(count($customerIds) / $numberOfThreads);
-        return $numberOfChunks > 0 ? $numberOfChunks : 1;
     }
 }

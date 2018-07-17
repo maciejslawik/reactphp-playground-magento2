@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace MSlwk\ReactPhpPlayground\Console\Command;
 
+use MSlwk\ReactPhpPlayground\Api\ChunkSizeCalculatorInterface;
 use MSlwk\ReactPhpPlayground\Api\CustomerIdsProviderInterface;
 use MSlwk\ReactPhpPlayground\Api\TimerInterface;
 use MSlwk\ReactPhpPlayground\Model\Adapter\ReactPHP\ProcessFactory;
@@ -56,12 +57,18 @@ class StartCliReportingService extends Command
     private $jsonHandler;
 
     /**
+     * @var ChunkSizeCalculatorInterface
+     */
+    private $chunkSizeCalculator;
+
+    /**
      * StartCliReportingService constructor.
      * @param TimerInterface $timer
      * @param CustomerIdsProviderInterface $customerIdsProvider
      * @param Factory $loopFactory
      * @param ProcessFactory $processFactory
      * @param Json $jsonHandler
+     * @param ChunkSizeCalculatorInterface $chunkSizeCalculator
      * @param null $name
      */
     public function __construct(
@@ -70,6 +77,7 @@ class StartCliReportingService extends Command
         Factory $loopFactory,
         ProcessFactory $processFactory,
         Json $jsonHandler,
+        ChunkSizeCalculatorInterface $chunkSizeCalculator,
         $name = null
     ) {
         parent::__construct($name);
@@ -78,6 +86,7 @@ class StartCliReportingService extends Command
         $this->loop = $loopFactory::create();
         $this->processFactory = $processFactory;
         $this->jsonHandler = $jsonHandler;
+        $this->chunkSizeCalculator = $chunkSizeCalculator;
     }
 
     /**
@@ -119,8 +128,8 @@ class StartCliReportingService extends Command
      */
     protected function startProcesses(array $customerIds, int $numberOfThreads): void
     {
-        $numberOfChunks = $this->calculateNumberOfChunksForThreads($customerIds, $numberOfThreads);
-        $threadedCustomerIds = array_chunk($customerIds, $numberOfChunks);
+        $chunkSize = $this->chunkSizeCalculator->calculateChunkSize($customerIds, $numberOfThreads);
+        $threadedCustomerIds = array_chunk($customerIds, $chunkSize);
         foreach ($threadedCustomerIds as $customerIdsForSingleThread) {
             $this->createProcessDefinition($this->getFullCommand($customerIdsForSingleThread));
         }
@@ -146,23 +155,11 @@ class StartCliReportingService extends Command
      */
     protected function getFullCommand(array $customerIds): string
     {
-        return PHP_BINARY
-            . sprintf(
-                ' %s/bin/magento %s %s',
-                BP,
-                GenerateReports::COMMAND_NAME,
-                $this->jsonHandler->serialize($customerIds)
-            );
-    }
-
-    /**
-     * @param int[] $customerIds
-     * @param int $numberOfThreads
-     * @return int
-     */
-    protected function calculateNumberOfChunksForThreads(array $customerIds, int $numberOfThreads): int
-    {
-        $numberOfChunks = (int)(count($customerIds) / $numberOfThreads);
-        return $numberOfChunks > 0 ? $numberOfChunks : 1;
+        return sprintf(
+            ' %s/bin/magento %s %s',
+            BP,
+            GenerateReports::COMMAND_NAME,
+            $this->jsonHandler->serialize($customerIds)
+        );
     }
 }

@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace MSlwk\ReactPhpPlayground\Test\Unit\Console\Command;
 
 use Magento\Store\Model\StoreManagerInterface;
+use MSlwk\ReactPhpPlayground\Api\ChunkSizeCalculatorInterface;
 use MSlwk\ReactPhpPlayground\Console\Command\StartWebapiReportingService;
 use MSlwk\ReactPhpPlayground\Model\Adapter\ReactPHP\ClientFactory;
 use PHPUnit\Framework\TestCase;
@@ -54,6 +55,9 @@ class StartWebapiReportingServiceTest extends TestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|StoreManagerInterface $storeManager */
         $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMock();
+        /** @var PHPUnit_Framework_MockObject_MockObject|ChunkSizeCalculatorInterface $chunkSizeCalculator */
+        $chunkSizeCalculator = $this->getMockBuilder(ChunkSizeCalculatorInterface::class)
+            ->getMock();
 
         $this->command = new StartWebapiReportingService(
             $timer,
@@ -61,7 +65,8 @@ class StartWebapiReportingServiceTest extends TestCase
             $loopFactory,
             $clientFactory,
             $jsonHandler,
-            $storeManager
+            $storeManager,
+            $chunkSizeCalculator
         );
     }
 
