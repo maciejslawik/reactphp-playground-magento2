@@ -26,7 +26,7 @@ class ReportSender implements ReportSenderInterface
     public function sendReport(string $report): void
     {
         /**
-         * Report is being sent
+         * Report is being sent, waiting for 3rd-party service
          */
         sleep(1);
     }

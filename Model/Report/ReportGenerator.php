@@ -28,7 +28,21 @@ class ReportGenerator implements ReportGeneratorInterface
         /**
          * Report is being generated
          */
-        sleep(1);
+        $loopSize = 31500;
+
+        $primes = [];
+
+        for ($i = 2; $i < $loopSize; $i++) {
+            for ($j = 2; $j < $i; $j++) {
+                if ($i % $j == 0) {
+                    break;
+                }
+            }
+            if ($i === $j) {
+                $primes[] = $i;
+            }
+        }
+
         return '';
     }
 }
