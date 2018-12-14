@@ -2,6 +2,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/maciejslawik/reactphp-playground-magento2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/maciejslawik/reactphp-playground-magento2/?branch=master)
 [![Latest Stable Version](https://poser.pugx.org/mslwk/module-reactphp-playground/v/stable)](https://packagist.org/packages/mslwk/module-reactphp-playground)
 [![License](https://poser.pugx.org/mslwk/module-reactphp-playground/license)](https://packagist.org/packages/mslwk/module-reactphp-playground)
+[![Total Downloads](https://poser.pugx.org/mslwk/module-reactphp-playground/downloads)](https://packagist.org/packages/mslwk/module-reactphp-playground)
 
 # Magento 2 ReactPHP Playground #
 
